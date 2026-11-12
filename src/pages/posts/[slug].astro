@@ -1,0 +1,96 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import BarChart from '../../components/BarChart.astro';
+import PostCard from '../../components/PostCard.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getPosts, category, fmtDate, intentLabel, readMinutes, site } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+const { post, posts } = Astro.props;
+const d = post.data; const c = category(d.category);
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth <= 3);
+const related = posts.filter((p) => p.id !== post.id && p.data.category === d.category).slice(0, 3);
+const url = new URL(`/posts/${post.id}/`, Astro.site).href;
+const updated = d.updatedAt ?? d.publishedAt;
+const chart = d.chart ?? (d.products.filter((p) => p.priceJPY).length >= 2
+  ? { title: '価格の比較', unit: '円', note: `${d.products.find((p) => p.priceCheckedAt)?.priceCheckedAt ?? ''} 時点の参考価格。価格は変動します。`, items: d.products.filter((p) => p.priceJPY).map((p) => ({ label: p.name, value: p.priceJPY! })) }
+  : undefined);
+const jsonld: object[] = [
+  { '@context': 'https://schema.org', '@type': 'Article', headline: d.title, description: d.description, image: [new URL(d.eyecatch, Astro.site).href],
+    datePublished: d.publishedAt.toISOString(), dateModified: updated.toISOString(), mainEntityOfPage: url, inLanguage: 'ja',
+    author: { '@type': 'Person', name: site.author.name, url: new URL('/about/', Astro.site).href }, publisher: { '@type': 'Organization', name: site.publisher } },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: site.url + '/' },
+    { '@type': 'ListItem', position: 2, name: c.name, item: `${site.url}/categories/${c.id}/` },
+    { '@type': 'ListItem', position: 3, name: d.title, item: url } ] },
+];
+if (d.faq.length) jsonld.push({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: d.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+---
+<Base title={d.title} description={d.description} image={d.eyecatch} type="article" jsonld={jsonld} activeCategory={d.category} noindex={d.draft}>
+  <article class="g-page">
+    <header class="g-article-head">
+      <nav class="ob-footnote" aria-label="パンくずリスト"><a href={`/categories/${c.id}/`} style="color:var(--ob-accent);text-decoration:none">‹ {c.name}</a></nav>
+      <h1>{d.title}</h1>
+      <div class="g-meta ob-footnote">
+        <span class="ob-badge">{intentLabel[d.intent]}</span>
+        <time datetime={updated.toISOString()}>{fmtDate(updated)}{d.updatedAt ? ' 更新' : ' 公開'}</time>
+        <span>約{readMinutes(post.body)}分で読めます</span>
+        <span>{site.author.name}</span>
+      </div>
+      {d.pr && (
+        <div class="g-callout ob-footnote" role="note"><Icon name="megaphone" />
+          <span><b>PR</b> 本記事にはアフィリエイト広告（Amazonアソシエイト・楽天アフィリエイト等）を含みます。リンク経由の購入で当サイトに収益が発生することがありますが、掲載順位や評価は編集方針に基づき決定しています。</span></div>
+      )}
+      <img class="g-hero" src={d.eyecatch} alt={d.eyecatchAlt ?? d.title} width="1200" height="630" />
+    </header>
+
+    {toc.length > 2 && (
+      <details class="g-toc" open>
+        <summary>目次</summary>
+        <ol>{d.products.length > 0 && <li><a href="#picks">結論：おすすめ{d.products.length}選</a></li>}
+          {toc.map((h) => <li class={`h${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>)}
+          {d.faq.length > 0 && <li><a href="#faq">よくある質問</a></li>}</ol>
+      </details>
+    )}
+
+    {d.products.length > 0 && (
+      <section id="picks">
+        <h2 class="ob-title2" style="margin:24px 0 4px">結論：おすすめ{d.products.length}選</h2>
+        <p class="ob-footnote ob-secondary">価格・レビューは掲載時点の参考値です。最新情報は各販売ページでご確認ください。</p>
+        {chart && <BarChart {...chart} />}
+        <div class="g-products">{d.products.map((p, i) => <ProductCard p={p} rank={i + 1} />)}</div>
+      </section>
+    )}
+
+    <AdSlot />
+    <div class="g-prose"><Content /></div>
+
+    {d.faq.length > 0 && (
+      <section class="g-faq" id="faq"><h2 class="ob-title2">よくある質問</h2>
+        {d.faq.map((f) => <details><summary>{f.q}</summary><div>{f.a}</div></details>)}</section>
+    )}
+    <AdSlot />
+
+    {d.sources.length > 0 && (
+      <section class="g-sources"><div class="ob-section-header" style="margin-left:0">出典・参考</div>
+        <ol>{d.sources.map((s) => <li><a href={s.url} rel="nofollow noopener" target="_blank">{s.title}</a></li>)}</ol>
+        {d.usesRakutenApi && <p>商品情報の一部は楽天ウェブサービスを利用しています。<a href="https://developers.rakuten.com/" rel="nofollow noopener" target="_blank">Supported by Rakuten Developers</a></p>}
+      </section>
+    )}
+
+    <section class="ob-card g-author" style="margin:24px 0">
+      <span class="g-avatar" aria-hidden="true">優</span>
+      <div class="g-stack"><b>{site.author.name}</b><small>{site.author.role}</small>
+        <span class="ob-footnote ob-secondary">{site.author.bio}{d.aiAssisted && ' 記事はAIによる調査・下書きを活用し、編集方針と品質チェックを経て公開しています。'} <a href="/about/" style="color:var(--ob-accent)">編集方針</a></span></div>
+    </section>
+
+    {related.length > 0 && (<><div class="ob-section-header" style="margin-left:0">関連記事</div><div class="g-cards">{related.map((p) => <PostCard post={p} />)}</div></>)}
+  </article>
+</Base>

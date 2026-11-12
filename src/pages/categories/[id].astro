@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import CategoryIcon from '../../components/CategoryIcon.astro';
+import { getPosts, categories } from '../../lib/site';
+export function getStaticPaths() { return categories.map((c) => ({ params: { id: c.id }, props: { c } })); }
+const { c } = Astro.props;
+const posts = (await getPosts()).filter((p) => p.data.category === c.id);
+---
+<Base title={c.name} description={`${c.name}の比較・選び方・レビュー記事一覧。`} tab="categories" activeCategory={c.id}>
+  <div class="g-page wide">
+    <header class="g-header" style="display:flex;gap:16px;align-items:center">
+      <CategoryIcon id={c.id} size="lg" />
+      <div><h1 class="ob-large-title">{c.name}</h1><p class="ob-footnote ob-secondary">{c.en} · {posts.length}本の記事</p></div>
+    </header>
+    {posts.length ? <div class="g-cards">{posts.map((p) => <PostCard post={p} />)}</div>
+      : <div class="ob-empty"><span class="ob-empty-title">まだ記事がありません</span><span>このカテゴリの記事は準備中です。</span><a class="ob-button tinted" href="/">ホームに戻る</a></div>}
+  </div>
+</Base>

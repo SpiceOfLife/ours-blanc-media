@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import CategoryIcon from '../components/CategoryIcon.astro';
+import { getPosts, categories, site } from '../lib/site';
+const posts = await getPosts();
+const [featured, ...rest] = posts;
+const count = (id: string) => posts.filter((p) => p.data.category === id).length;
+---
+<Base tab="home">
+  <div class="g-page wide">
+    <header class="g-header">
+      <h1 class="ob-large-title">DTM・音楽機材ガイド</h1>
+      <p class="ob-subheadline ob-secondary">{site.description}</p>
+    </header>
+    {posts.length === 0 ? (
+      <div class="ob-empty"><span class="ob-empty-title">記事を準備中です</span><span>最初の記事は近日公開予定です。</span></div>
+    ) : (
+      <>
+        <div class="ob-section-header" style="margin-left:0">新着・更新</div>
+        <div class="g-cards">
+          <PostCard post={featured} featured />
+          {rest.slice(0, 11).map((p) => <PostCard post={p} />)}
+        </div>
+      </>
+    )}
+    <div class="ob-section-header" style="margin-left:0">カテゴリから探す</div>
+    <div class="ob-list">
+      {categories.map((c) => (
+        <a href={`/categories/${c.id}/`} class="ob-chevron"><CategoryIcon id={c.id} /><span>{c.name}</span><span class="g-row-meta">{count(c.id)}</span></a>
+      ))}
+    </div>
+  </div>
+</Base>

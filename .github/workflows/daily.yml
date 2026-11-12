@@ -1,0 +1,53 @@
+name: Daily PDCA (metrics → strategy → articles → report)
+on:
+  schedule:
+    - cron: '17 20 * * *'   # 05:17 JST
+  workflow_dispatch:
+    inputs:
+      dry_run: { description: 'Mock run (no API calls, nothing published)', type: boolean, default: false }
+      articles: { description: 'Override articles today (1-3, blank = strategy)', required: false }
+permissions:
+  contents: write
+concurrency: { group: daily, cancel-in-progress: false }
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk >/dev/null
+      - run: npm ci
+      - name: Run daily pipeline
+        env:
+          DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+          DAILY_BUDGET_USD: ${{ vars.DAILY_BUDGET_USD }}
+          RAKUTEN_APP_ID: ${{ secrets.RAKUTEN_APP_ID }}
+          RAKUTEN_ACCESS_KEY: ${{ secrets.RAKUTEN_ACCESS_KEY }}
+          RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
+          AMAZON_ASSOCIATE_TAG: ${{ secrets.AMAZON_ASSOCIATE_TAG }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+          GOOGLE_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+          GOOGLE_OAUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+          GOOGLE_OAUTH_REFRESH_TOKEN: ${{ secrets.GOOGLE_OAUTH_REFRESH_TOKEN }}
+          ADSENSE_ACCOUNT: ${{ vars.ADSENSE_ACCOUNT }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ vars.CF_ACCOUNT_ID }}
+          CF_SITE_TAG: ${{ vars.CF_SITE_TAG }}
+          ARTICLES_OVERRIDE: ${{ inputs.articles }}
+        run: node pipeline/run-daily.mjs
+      - name: Verify site still builds
+        run: npm run build
+      - name: Commit & push (Cloudflare Pages deploys on push)
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git config user.name "ours-blanc-bot"
+          git config user.email "support@ours-blanc.app"
+          git add src/content/posts public/eyecatch config drafts reports
+          git diff --cached --quiet && echo "nothing to commit" && exit 0
+          git commit -m "daily: $(TZ=Asia/Tokyo date +%F) articles + PDCA report"
+          git push

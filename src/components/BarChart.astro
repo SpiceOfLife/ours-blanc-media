@@ -1,0 +1,19 @@
+---
+// HIG Charting data: one clear message, labelled axis/unit, accessible summary.
+interface Props { title: string; unit: string; note?: string; items: { label: string; value: number }[] }
+const { title, unit, note, items } = Astro.props;
+const max = Math.max(...items.map((i) => i.value), 1);
+const fmt = (v: number) => (unit === '円' ? '¥' + v.toLocaleString('ja-JP') : v.toLocaleString('ja-JP') + unit);
+const min = items.reduce((a, b) => (b.value < a.value ? b : a), items[0]);
+---
+<figure class="g-chart" aria-label={`${title}。最小は${min?.label}の${min ? fmt(min.value) : ''}`}>
+  <h3>{title}</h3>
+  {note && <p class="ob-footnote ob-secondary">{note}</p>}
+  <div class="g-bars" role="list">
+    {items.map((i) => (
+      <div class="g-bar" role="listitem"><span class="n" title={i.label}>{i.label}</span>
+        <span class="track"><span class="fill" style={`width:${(i.value / max) * 100}%`}></span></span>
+        <span class="v">{fmt(i.value)}</span></div>
+    ))}
+  </div>
+</figure>

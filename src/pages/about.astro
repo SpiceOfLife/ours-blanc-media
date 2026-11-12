@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../lib/site';
+import exp from '../../config/experience.json';
+const jsonld = [{ '@context': 'https://schema.org', '@type': 'Person', name: site.author.name, jobTitle: site.author.role, url: site.url + '/about/', sameAs: Object.values(site.author.links) }];
+---
+<Base title="運営者・編集方針" description="ours blanc Gear の運営者情報と、AIを活用した記事制作の編集方針。" jsonld={jsonld} tab="about">
+  <div class="g-page">
+    <header class="g-header"><h1 class="ob-large-title">運営者・編集方針</h1></header>
+    <section class="ob-card g-author"><span class="g-avatar" aria-hidden="true">優</span>
+      <div class="g-stack"><b>{site.author.name}</b><small>{site.author.role}</small><span class="ob-footnote ob-secondary">{site.author.bio}</span></div></section>
+    <div class="ob-section-header" style="margin-left:0">運営者情報</div>
+    <ul class="ob-list">
+      <li>屋号<span class="g-row-meta">{site.publisher}</span></li>
+      <li>運営者<span class="g-row-meta">{site.author.name}</span></li>
+      <li>お問い合わせ<a class="g-row-meta" style="color:var(--ob-accent)" href={`mailto:${site.contact}`}>{site.contact}</a></li>
+      <li>開発アプリ<a class="g-row-meta" style="color:var(--ob-accent)" href={site.author.links.apps}>ours-blanc.app</a></li>
+    </ul>
+    <div class="g-prose">
+      <h2>編集方針</h2>
+      <p>ours blanc Gear は、DTM・音楽機材を「何に使う人に、なぜ合うのか」という観点で整理するメディアです。記事の制作には AI（Anthropic Claude）を活用し、メーカー公式情報・販売ページ等の一次情報を調査したうえで下書きを作成し、以下の品質チェックに合格したものだけを公開しています。</p>
+      <ul>
+        <li><b>出典の明示</b>：スペックや価格など事実に関する記述には出典を付けます。価格は取得日を併記します。</li>
+        <li><b>体験の捏造をしない</b>：運営者が実際に所有・使用した機材以外について「使ってみた」等の体験談は書きません。</li>
+        <li><b>広告と評価の分離</b>：報酬の有無・料率で掲載順位や評価を変えません。良い点と気になる点を必ず併記します。</li>
+        <li><b>重複・量産の回避</b>：既存記事と内容が重複する記事は公開せず、既存記事の更新で対応します。</li>
+        <li><b>継続的な更新</b>：検索データと読者の反応をもとに、古くなった情報や分かりにくい記事を定期的に見直します。</li>
+      </ul>
+      <p>誤りを見つけた場合は <a href={`mailto:${site.contact}`}>{site.contact}</a> までご連絡ください。確認のうえ速やかに訂正します。</p>
+      <h2>運営者が使用している機材</h2>
+      <ul>{exp.items.map((i) => <li>{i.name}</li>)}</ul>
+    </div>
+  </div>
+</Base>

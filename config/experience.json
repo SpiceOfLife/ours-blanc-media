@@ -1,0 +1,10 @@
+{
+  "_readme": "Yuさんが実際に所有・使用している機材/ソフト。AIはここに書かれたこと以外で『使ってみた』等の一次体験を書かない（QAで検出→不合格）。notes に感想を書くと記事に引用されます。",
+  "items": [
+    { "name": "Yamaha reface DX", "category": "synth", "owned": true, "notes": "" },
+    { "name": "M-VAVE SMK-37 Pro", "category": "midi-keyboard", "owned": true, "notes": "" },
+    { "name": "Ableton Live (Max for Live)", "category": "software", "owned": true, "notes": "" },
+    { "name": "ACE Studio", "category": "software", "owned": true, "notes": "" },
+    { "name": "KORG Module (iOS)", "category": "mobile", "owned": true, "notes": "" }
+  ]
+}

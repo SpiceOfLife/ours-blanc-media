@@ -1,0 +1,10 @@
+[
+  { "id": "audio-interface", "name": "オーディオインターフェース", "en": "Audio Interfaces", "color": "blue", "glyph": "interface", "rakutenGenreId": "" },
+  { "id": "midi-keyboard", "name": "MIDIキーボード", "en": "MIDI Keyboards", "color": "indigo", "glyph": "keys", "rakutenGenreId": "" },
+  { "id": "monitoring", "name": "モニタースピーカー・ヘッドホン", "en": "Monitors & Headphones", "color": "teal", "glyph": "speaker", "rakutenGenreId": "" },
+  { "id": "microphone", "name": "マイク・録音", "en": "Microphones & Recording", "color": "pink", "glyph": "mic", "rakutenGenreId": "" },
+  { "id": "synth", "name": "シンセサイザー", "en": "Synthesizers", "color": "purple", "glyph": "wave", "rakutenGenreId": "" },
+  { "id": "piano", "name": "電子ピアノ・ステージピアノ", "en": "Digital Pianos", "color": "orange", "glyph": "keys", "rakutenGenreId": "" },
+  { "id": "software", "name": "DAW・プラグイン", "en": "DAWs & Plug-ins", "color": "cyan", "glyph": "plugin", "rakutenGenreId": "" },
+  { "id": "mobile", "name": "iPhone・iPadで音楽制作", "en": "Music on iPhone & iPad", "color": "green", "glyph": "phone", "rakutenGenreId": "" }
+]

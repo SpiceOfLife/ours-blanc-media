@@ -1,0 +1,221 @@
+{
+  "_readme": "記事トピックの待ち行列。status: queued | in-progress | published | rejected。PDCAで priority が自動調整され、新規トピックが追加されます。",
+  "topics": [
+    {
+      "id": "ai-beginner-audio-interface",
+      "keyword": "オーディオインターフェース 初心者 おすすめ",
+      "category": "audio-interface",
+      "intent": "buying-guide",
+      "priority": 10,
+      "status": "in-progress"
+    },
+    {
+      "id": "ai-loopback-streaming",
+      "keyword": "ループバック機能 オーディオインターフェース 配信",
+      "category": "audio-interface",
+      "intent": "comparison",
+      "priority": 8,
+      "status": "queued"
+    },
+    {
+      "id": "ai-ipad-compatible",
+      "keyword": "iPad 対応 オーディオインターフェース USB-C",
+      "category": "audio-interface",
+      "intent": "buying-guide",
+      "priority": 7,
+      "status": "queued"
+    },
+    {
+      "id": "ai-latency-settings",
+      "keyword": "オーディオインターフェース レイテンシー バッファサイズ 設定",
+      "category": "audio-interface",
+      "intent": "howto",
+      "priority": 6,
+      "status": "queued"
+    },
+    {
+      "id": "mk-25key-compact",
+      "keyword": "MIDIキーボード 25鍵 おすすめ コンパクト",
+      "category": "midi-keyboard",
+      "intent": "buying-guide",
+      "priority": 10,
+      "status": "in-progress"
+    },
+    {
+      "id": "mk-49-61-key",
+      "keyword": "MIDIキーボード 49鍵 61鍵 比較",
+      "category": "midi-keyboard",
+      "intent": "comparison",
+      "priority": 8,
+      "status": "queued"
+    },
+    {
+      "id": "mk-bluetooth-midi",
+      "keyword": "Bluetooth MIDI キーボード ワイヤレス",
+      "category": "midi-keyboard",
+      "intent": "buying-guide",
+      "priority": 6,
+      "status": "queued"
+    },
+    {
+      "id": "mk-ableton-control",
+      "keyword": "Ableton Live 向け MIDIコントローラー",
+      "category": "midi-keyboard",
+      "intent": "comparison",
+      "priority": 7,
+      "status": "queued"
+    },
+    {
+      "id": "mon-desktop-monitor",
+      "keyword": "モニタースピーカー 自宅 DTM 小型",
+      "category": "monitoring",
+      "intent": "buying-guide",
+      "priority": 9,
+      "status": "queued"
+    },
+    {
+      "id": "mon-headphone-mixing",
+      "keyword": "モニターヘッドホン ミックス 開放型 密閉型",
+      "category": "monitoring",
+      "intent": "comparison",
+      "priority": 8,
+      "status": "queued"
+    },
+    {
+      "id": "mon-room-treatment",
+      "keyword": "自宅スタジオ 吸音 ルームアコースティック 対策",
+      "category": "monitoring",
+      "intent": "howto",
+      "priority": 5,
+      "status": "queued"
+    },
+    {
+      "id": "mic-condenser-vs-dynamic",
+      "keyword": "コンデンサーマイク ダイナミックマイク 違い 宅録",
+      "category": "microphone",
+      "intent": "comparison",
+      "priority": 8,
+      "status": "queued"
+    },
+    {
+      "id": "mic-usb-podcast",
+      "keyword": "USBマイク 歌ってみた 配信 おすすめ",
+      "category": "microphone",
+      "intent": "buying-guide",
+      "priority": 8,
+      "status": "queued"
+    },
+    {
+      "id": "mic-piano-recording",
+      "keyword": "ピアノ 録音 マイク 配置",
+      "category": "microphone",
+      "intent": "howto",
+      "priority": 7,
+      "status": "queued"
+    },
+    {
+      "id": "syn-beginner-hardware",
+      "keyword": "ハードウェアシンセ 初心者 おすすめ",
+      "category": "synth",
+      "intent": "buying-guide",
+      "priority": 8,
+      "status": "queued"
+    },
+    {
+      "id": "syn-fm-synth",
+      "keyword": "FMシンセ おすすめ reface DX 比較",
+      "category": "synth",
+      "intent": "comparison",
+      "priority": 7,
+      "status": "queued"
+    },
+    {
+      "id": "syn-compact-portable",
+      "keyword": "小型シンセ 持ち運び 電池駆動",
+      "category": "synth",
+      "intent": "buying-guide",
+      "priority": 6,
+      "status": "queued"
+    },
+    {
+      "id": "pia-88key-home",
+      "keyword": "電子ピアノ 88鍵 自宅 おすすめ",
+      "category": "piano",
+      "intent": "buying-guide",
+      "priority": 10,
+      "status": "queued"
+    },
+    {
+      "id": "pia-stage-piano-jazz",
+      "keyword": "ステージピアノ ジャズ ライブ 軽量",
+      "category": "piano",
+      "intent": "comparison",
+      "priority": 8,
+      "status": "queued"
+    },
+    {
+      "id": "pia-keyboard-action",
+      "keyword": "電子ピアノ 鍵盤タッチ ハンマーアクション 違い",
+      "category": "piano",
+      "intent": "howto",
+      "priority": 6,
+      "status": "queued"
+    },
+    {
+      "id": "sw-daw-beginner",
+      "keyword": "DAW 初心者 おすすめ 比較",
+      "category": "software",
+      "intent": "comparison",
+      "priority": 9,
+      "status": "queued"
+    },
+    {
+      "id": "sw-free-plugins",
+      "keyword": "無料 VST プラグイン おすすめ",
+      "category": "software",
+      "intent": "buying-guide",
+      "priority": 8,
+      "status": "queued"
+    },
+    {
+      "id": "sw-piano-vst",
+      "keyword": "ピアノ音源 VST おすすめ 比較",
+      "category": "software",
+      "intent": "comparison",
+      "priority": 8,
+      "status": "queued"
+    },
+    {
+      "id": "sw-ai-vocal",
+      "keyword": "AI歌声合成 ソフト 比較",
+      "category": "software",
+      "intent": "comparison",
+      "priority": 6,
+      "status": "queued"
+    },
+    {
+      "id": "mob-iphone-dtm",
+      "keyword": "iPhone DTM アプリ 機材 始め方",
+      "category": "mobile",
+      "intent": "howto",
+      "priority": 7,
+      "status": "queued"
+    },
+    {
+      "id": "mob-ipad-auv3",
+      "keyword": "iPad AUv3 シンセ アプリ おすすめ",
+      "category": "mobile",
+      "intent": "buying-guide",
+      "priority": 6,
+      "status": "queued"
+    },
+    {
+      "id": "mob-iphone-recording",
+      "keyword": "iPhone 録音 マイク 外付け 楽器",
+      "category": "mobile",
+      "intent": "buying-guide",
+      "priority": 7,
+      "status": "queued"
+    }
+  ]
+}

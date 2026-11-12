@@ -1,0 +1,8 @@
+---
+interface Props { value: number; count?: number; label?: string }
+const { value, count, label } = Astro.props;
+---
+<span class="g-stars" role="img" aria-label={`${label ?? '評価'} 5点中${value.toFixed(1)}点${count ? `（${count.toLocaleString('ja-JP')}件）` : ''}`}>
+  <span class="s" style={`--p:${(value / 5) * 100}%`}></span>
+  <span class="ob-footnote ob-mono-digits"><b>{value.toFixed(1)}</b>{count ? ` (${count.toLocaleString('ja-JP')}件)` : ''}{label ? ` · ${label}` : ''}</span>
+</span>

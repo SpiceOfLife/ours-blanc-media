@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { categories } from '../lib/site';
+const suggestions = ['オーディオインターフェース', 'MIDIキーボード', '電子ピアノ', 'モニターヘッドホン', '無料プラグイン'];
+---
+<Base title="検索" tab="search" noindex>
+  <div class="g-page">
+    <header class="g-header"><h1 class="ob-large-title">検索</h1></header>
+    <form class="g-search" role="search" onsubmit="return false"><Icon name="search" />
+      <input id="q" type="search" placeholder="機材・キーワードを検索" aria-label="検索" autocomplete="off" enterkeyhint="search" autofocus /></form>
+    <div class="g-scopes"><div class="ob-segmented" role="group" aria-label="検索範囲" id="scopes">
+      <button data-scope="" aria-pressed="true">すべて</button>
+      {categories.map((c) => <button data-scope={c.id} aria-pressed="false">{c.name}</button>)}
+    </div></div>
+    <div id="suggest">
+      <div class="ob-section-header" style="margin-left:0">よく検索されるキーワード</div>
+      <div class="g-suggest">{suggestions.map((s) => <button class="ob-button gray small" data-suggest={s}>{s}</button>)}</div>
+    </div>
+    <p id="status" class="ob-footnote ob-secondary" aria-live="polite"></p>
+    <div id="results" class="ob-list" hidden></div>
+    <div id="empty" class="ob-empty" hidden><span class="ob-empty-title">見つかりませんでした</span><span>別のキーワードや「すべて」で試してください。</span></div>
+  </div>
+  <script is:inline>
+  (function(){var idx=null,scope='',q=document.getElementById('q'),R=document.getElementById('results'),E=document.getElementById('empty'),S=document.getElementById('status'),G=document.getElementById('suggest');
+  var p=new URLSearchParams(location.search).get('q');if(p)q.value=p;
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function hi(s,t){if(!t)return esc(s);var i=s.toLowerCase().indexOf(t.toLowerCase());return i<0?esc(s):esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+t.length))+'</mark>'+esc(s.slice(i+t.length))}
+  function run(){if(!idx)return;var t=q.value.trim(),terms=t.toLowerCase().split(/\s+/).filter(Boolean);
+    G.hidden=!!t;if(!t&&!scope){R.hidden=true;E.hidden=true;S.textContent='';return}
+    var hits=idx.filter(function(d){if(scope&&d.c!==scope)return false;var h=(d.t+' '+d.d+' '+d.k+' '+d.p).toLowerCase();return terms.every(function(w){return h.indexOf(w)>=0})});
+    S.textContent=hits.length+'件の結果';R.hidden=!hits.length;E.hidden=!!hits.length;
+    R.innerHTML=hits.slice(0,50).map(function(d){return '<a class="ob-chevron" href="'+d.u+'"><span class="g-stack"><span>'+hi(d.t,terms[0])+'</span><small>'+esc(d.cn)+' · '+esc(d.d.slice(0,60))+'…</small></span></a>'}).join('')}
+  fetch('/search-index.json').then(function(r){return r.json()}).then(function(j){idx=j;run()});
+  var tm;q.addEventListener('input',function(){clearTimeout(tm);tm=setTimeout(run,120)});
+  document.querySelectorAll('[data-scope]').forEach(function(b){b.onclick=function(){scope=b.dataset.scope;document.querySelectorAll('[data-scope]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});run()}});
+  document.querySelectorAll('[data-suggest]').forEach(function(b){b.onclick=function(){q.value=b.dataset.suggest;run()}});})();
+  </script>
+</Base>

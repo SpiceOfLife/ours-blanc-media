@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+.work/
+.env
+src/content/posts/_dry-*
+public/eyecatch/_dry-*
+reports/daily/*dry*

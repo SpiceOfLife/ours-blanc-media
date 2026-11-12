@@ -1,0 +1,7 @@
+---
+import Icon from './Icon.astro';
+import { category } from '../lib/site';
+interface Props { id: string; size?: 'lg' }
+const c = category(Astro.props.id);
+---
+<span class={`g-icon c-${c.color} ${Astro.props.size ?? ''}`}><Icon name={c.glyph} /></span>

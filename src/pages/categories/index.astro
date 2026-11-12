@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import CategoryIcon from '../../components/CategoryIcon.astro';
+import { getPosts, categories } from '../../lib/site';
+const posts = await getPosts();
+---
+<Base title="カテゴリ" tab="categories">
+  <div class="g-page">
+    <header class="g-header"><h1 class="ob-large-title">カテゴリ</h1></header>
+    <div class="ob-list">
+      {categories.map((c) => (
+        <a href={`/categories/${c.id}/`} class="ob-chevron"><CategoryIcon id={c.id} />
+          <span class="g-stack"><span>{c.name}</span><small>{c.en}</small></span>
+          <span class="g-row-meta">{posts.filter((p) => p.data.category === c.id).length}</span></a>
+      ))}
+    </div>
+  </div>
+</Base>

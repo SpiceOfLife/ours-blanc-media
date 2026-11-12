@@ -1,0 +1,26 @@
+{
+  "name": "ours-blanc-media",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "ours blanc Gear — AI-assisted DTM & music gear media (gear.ours-blanc.app)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "daily": "node pipeline/run-daily.mjs",
+    "pipeline:dry": "DRY_RUN=1 node pipeline/run-daily.mjs",
+    "eyecatch": "node pipeline/eyecatch.mjs",
+    "qa": "node pipeline/qa.mjs",
+    "test": "node --test pipeline/test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.8.0",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.4.11",
+    "sharp": "^0.35.5"
+  }
+}

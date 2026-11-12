@@ -1,0 +1,118 @@
+---
+import '../styles/ob-design.css';
+import '../styles/gear.css';
+import Icon from '../components/Icon.astro';
+import CategoryIcon from '../components/CategoryIcon.astro';
+import { site, categories, env } from '../lib/site';
+
+interface Props { title?: string; description?: string; image?: string; type?: 'website' | 'article'; jsonld?: object[]; noindex?: boolean; tab?: 'home' | 'categories' | 'search' | 'about'; activeCategory?: string }
+const { title, description = site.description, image = '/og-default.png', type = 'website', jsonld = [], noindex = false, tab, activeCategory } = Astro.props;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — DTM・音楽機材の比較とレビュー`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+const path = Astro.url.pathname;
+const org = { '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, url: site.url, inLanguage: 'ja',
+  publisher: { '@type': 'Organization', name: site.publisher, url: 'https://ours-blanc.app' },
+  potentialAction: { '@type': 'SearchAction', target: `${site.url}/search/?q={query}`, 'query-input': 'required name=query' } };
+---
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex" />}
+  <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+  <meta property="og:site_name" content={site.name} />
+  <meta property="og:title" content={title ?? site.name} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  {env.gscVerification && <meta name="google-site-verification" content={env.gscVerification} />}
+  <script is:inline>try{var t=localStorage.getItem('ob-theme');if(t&&t!=='system')document.documentElement.dataset.obTheme=t}catch(e){}</script>
+  {env.adsenseClient && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${env.adsenseClient}`} crossorigin="anonymous"></script>}
+  <script type="application/ld+json" set:html={JSON.stringify([org, ...jsonld])} />
+</head>
+<body class="ob">
+  <a class="g-skip" href="#main">本文へスキップ</a>
+  <div class="g-shell">
+    <!-- Sidebar = split-view primary column (iPad / Mac pattern) -->
+    <nav class="g-sidebar" aria-label="サイドバー">
+      <a href="/" class="ob-wordmark" style="text-decoration:none;color:inherit">ours blanc <b>Gear</b></a>
+      <form class="g-search" action="/search/" role="search">
+        <Icon name="search" /><input name="q" type="search" placeholder="機材・キーワードを検索" aria-label="検索" />
+      </form>
+      <div class="ob-section-header">ブラウズ</div>
+      <div class="ob-list">
+        <a href="/" aria-current={path === '/' ? 'page' : undefined}><span class="g-icon c-blue"><Icon name="home" /></span>ホーム</a>
+        <a href="/categories/" aria-current={path === '/categories/' ? 'page' : undefined}><span class="g-icon c-gray"><Icon name="grid" /></span>すべてのカテゴリ</a>
+      </div>
+      <div class="ob-section-header">カテゴリ</div>
+      <div class="ob-list">
+        {categories.map((c) => (
+          <a href={`/categories/${c.id}/`} aria-current={activeCategory === c.id ? 'page' : undefined}><CategoryIcon id={c.id} />{c.name}</a>
+        ))}
+      </div>
+      <div class="ob-section-header">このサイトについて</div>
+      <div class="ob-list">
+        <a href="/about/"><span class="g-icon c-indigo"><Icon name="info" /></span>運営者・編集方針</a>
+        <a href="/disclosure/"><span class="g-icon c-orange"><Icon name="megaphone" /></span>広告・PR表記</a>
+        <button type="button" class="ob-tappable" data-open-settings style="all:unset;display:flex;align-items:center;gap:12px;min-height:44px;padding:8px 16px;cursor:pointer;position:relative;border-top:.5px solid var(--ob-separator)"><span class="g-icon c-gray"><Icon name="gear" /></span>表示設定</button>
+      </div>
+    </nav>
+
+    <div class="g-main">
+      <header class="ob-toolbar g-mobile-only">
+        <a href="/" class="ob-wordmark" style="text-decoration:none;color:inherit">ours blanc <b>Gear</b></a>
+        <span class="ob-spacer"></span>
+        <a class="ob-button plain small" href="/search/" aria-label="検索"><Icon name="search" class="" /></a>
+      </header>
+      <main id="main"><slot /></main>
+      <footer class="g-footer">
+        <p>当サイトはアフィリエイト広告（Amazonアソシエイト、楽天アフィリエイト等）およびGoogle AdSenseを利用しています。<br />Amazonのアソシエイトとして、{site.publisher}は適格販売により収入を得ています。</p>
+        <p><a href="/about/">運営者情報</a><a href="/disclosure/">広告・PR表記</a><a href="/privacy/">プライバシーポリシー</a><a href={`mailto:${site.contact}`}>お問い合わせ</a></p>
+        <p>© {new Date().getFullYear()} {site.publisher} · <a href="https://ours-blanc.app">ours-blanc.app</a></p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Tab bar (iPhone pattern): ≤5 top-level destinations -->
+  <nav class="g-tabbar" aria-label="タブバー">
+    <a href="/" aria-current={tab === 'home' ? 'page' : undefined}><Icon name="home" />ホーム</a>
+    <a href="/categories/" aria-current={tab === 'categories' ? 'page' : undefined}><Icon name="grid" />カテゴリ</a>
+    <a href="/search/" aria-current={tab === 'search' ? 'page' : undefined}><Icon name="search" />検索</a>
+    <button type="button" data-open-settings><Icon name="gear" />設定</button>
+  </nav>
+
+  <!-- Settings sheet (HIG Modality + Settings): one task, explicit Done -->
+  <div class="ob-sheet-backdrop" id="settings" hidden role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="ob-sheet">
+      <div class="ob-sheet-header"><span style="width:60px"></span><h2 id="settings-title">表示設定</h2><button class="ob-button plain" data-close-settings style="width:60px;font-weight:600">完了</button></div>
+      <div style="padding:16px">
+        <div class="ob-section-header" style="margin-left:0">外観</div>
+        <div class="ob-segmented" role="group" aria-label="外観">
+          <button data-theme="system">自動</button><button data-theme="light">ライト</button><button data-theme="dark">ダーク</button>
+        </div>
+        <p class="ob-footnote ob-secondary">「自動」はデバイスの設定に従います。</p>
+      </div>
+    </div>
+  </div>
+  <script is:inline>
+  (function(){var s=document.getElementById('settings');function cur(){try{return localStorage.getItem('ob-theme')||'system'}catch(e){return 'system'}}
+  function sync(){document.querySelectorAll('[data-theme]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.theme===cur())})}
+  document.querySelectorAll('[data-open-settings]').forEach(function(b){b.onclick=function(){s.hidden=false;sync();s.querySelector('[data-close-settings]').focus()}});
+  s.querySelector('[data-close-settings]').onclick=function(){s.hidden=true};
+  s.onclick=function(e){if(e.target===s)s.hidden=true};document.addEventListener('keydown',function(e){if(e.key==='Escape')s.hidden=true});
+  document.querySelectorAll('[data-theme]').forEach(function(b){b.onclick=function(){var t=b.dataset.theme;try{localStorage.setItem('ob-theme',t)}catch(e){}
+  if(t==='system')delete document.documentElement.dataset.obTheme;else document.documentElement.dataset.obTheme=t;sync()}});})();
+  </script>
+  {env.cfBeacon && <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: env.cfBeacon })}></script>}
+</body>
+</html>

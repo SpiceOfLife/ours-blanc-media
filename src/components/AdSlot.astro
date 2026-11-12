@@ -1,0 +1,5 @@
+---
+import { env } from '../lib/site';
+// Auto ads fill these reserved slots; min-height prevents layout shift (HIG Loading).
+---
+{env.adsenseClient && <div class="g-ad" aria-label="広告"><ins class="adsbygoogle" style="display:block" data-ad-client={env.adsenseClient} data-ad-format="auto" data-full-width-responsive="true"></ins><script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>}

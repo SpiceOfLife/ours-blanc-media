@@ -1,0 +1,31 @@
+---
+import Stars from './Stars.astro';
+import { yen } from '../lib/site';
+interface Props { p: any; rank?: number }
+const { p, rank } = Astro.props;
+const specs = Object.entries(p.specs ?? {});
+---
+<article class="g-product" id={`p-${rank}`}>
+  <div class="g-product-top">
+    {p.imageUrl && <img src={p.imageUrl} alt={p.name} width="96" height="96" loading="lazy" referrerpolicy="no-referrer" />}
+    <div class="g-stack">
+      <h3>{rank && <span class="g-rank">{rank}</span>}{p.name}</h3>
+      {p.brand && <small>{p.brand}{p.bestFor ? ` · ${p.bestFor}` : ''}</small>}
+      {p.priceJPY && <div><span class="g-price">{yen(p.priceJPY)}</span> <span class="ob-caption ob-secondary">（{p.priceCheckedAt} 時点・税込目安）</span></div>}
+      {p.editorScore != null && <Stars value={p.editorScore} label="編集部スコア" />}
+      {p.reviewAverage != null && <Stars value={p.reviewAverage} count={p.reviewCount} label={p.reviewSource ?? 'ユーザーレビュー'} />}
+    </div>
+  </div>
+  {p.summary && <p class="ob-callout" style="margin:0">{p.summary}</p>}
+  {(p.pros.length > 0 || p.cons.length > 0) && (
+    <div class="g-proscons">
+      <ul class="g-pros" aria-label="良い点">{p.pros.map((t: string) => <li>{t}</li>)}</ul>
+      <ul class="g-cons" aria-label="気になる点">{p.cons.map((t: string) => <li>{t}</li>)}</ul>
+    </div>
+  )}
+  {specs.length > 0 && <dl class="g-specs">{specs.map(([k, v]) => <><dt>{k}</dt><dd>{v}</dd></>)}</dl>}
+  <div class="g-buy">
+    {p.rakutenUrl && <a class="ob-button rakuten" href={p.rakutenUrl} rel="sponsored noopener" target="_blank">楽天市場で見る</a>}
+    {p.amazonUrl && <a class="ob-button amazon" href={p.amazonUrl} rel="sponsored noopener" target="_blank">Amazonで見る</a>}
+  </div>
+</article>

@@ -1,0 +1,33 @@
+{
+  "name": "ours blanc Gear",
+  "product": "Gear",
+  "url": "https://gear.ours-blanc.app",
+  "lang": "ja",
+  "description": "ジャズピアニスト／音楽アプリ開発者が運営する、DTM・音楽機材の比較とレビュー。スペック・価格・使いどころを出典付きで整理します。",
+  "author": {
+    "name": "大村優介 (Yusuke Omura)",
+    "role": "ジャズピアニスト / ソフトウェアエンジニア / ours-blanc 主宰",
+    "bio": "洗足学園音楽大学ジャズピアノ科卒。2016年からソフトウェアエンジニア。ours-blanc.app で音楽Webアプリ・iOS/Macアプリを開発しています。",
+    "links": {
+      "apps": "https://ours-blanc.app",
+      "github": "https://github.com/SpiceOfLife"
+    }
+  },
+  "contact": "support@ours-blanc.app",
+  "publisher": "ours-blanc",
+  "affiliate": {
+    "amazonTagEnv": "AMAZON_ASSOCIATE_TAG",
+    "rakutenAffiliateIdEnv": "RAKUTEN_AFFILIATE_ID"
+  },
+  "pipeline": {
+    "maxArticlesPerDay": 3,
+    "minArticlesPerDay": 1,
+    "defaultArticlesPerDay": 2,
+    "maxRefreshesPerDay": 1,
+    "dailyBudgetUSD": 3.0,
+    "qaPassScore": 80,
+    "minChars": 3500,
+    "maxChars": 12000,
+    "similarityThreshold": 0.55
+  }
+}

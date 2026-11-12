@@ -1,0 +1,15 @@
+---
+import { category, fmtDate, intentLabel, type Post } from '../lib/site';
+interface Props { post: Post; featured?: boolean }
+const { post, featured } = Astro.props;
+const d = post.data; const c = category(d.category);
+---
+<a class:list={['g-card', { 'g-featured': featured }]} href={`/posts/${post.id}/`}>
+  <img src={d.eyecatch} alt={d.eyecatchAlt ?? ''} width="1200" height="630" loading={featured ? 'eager' : 'lazy'} decoding="async" />
+  <div class="g-card-body">
+    <div class="g-card-meta ob-footnote"><span class="ob-badge">{intentLabel[d.intent]}</span><span>{c.name}</span></div>
+    <h3>{d.title}</h3>
+    <p>{d.description}</p>
+    <time class="ob-caption ob-secondary" datetime={(d.updatedAt ?? d.publishedAt).toISOString()}>{fmtDate(d.updatedAt ?? d.publishedAt)}{d.updatedAt ? ' 更新' : ''}</time>
+  </div>
+</a>
