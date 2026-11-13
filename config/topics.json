@@ -7,7 +7,7 @@
       "category": "audio-interface",
       "intent": "buying-guide",
       "priority": 10,
-      "status": "in-progress"
+      "status": "queued"
     },
     {
       "id": "ai-loopback-streaming",
@@ -39,7 +39,7 @@
       "category": "midi-keyboard",
       "intent": "buying-guide",
       "priority": 10,
-      "status": "in-progress"
+      "status": "queued"
     },
     {
       "id": "mk-49-61-key",
@@ -216,6 +216,39 @@
       "intent": "buying-guide",
       "priority": 7,
       "status": "queued"
+    },
+    {
+      "id": "mk-smk37pro-review",
+      "keyword": "M-VAVE SMK-37 Pro レビュー 評価",
+      "category": "midi-keyboard",
+      "intent": "single-review",
+      "priority": 7,
+      "status": "queued",
+      "source": "claude-review",
+      "reason": "所有機材（一次情報を活かせる）・競合が薄い型番指名KW",
+      "addedAt": "2026-11-14"
+    },
+    {
+      "id": "sw-max-for-live-devices",
+      "keyword": "Max for Live 無料 デバイス おすすめ",
+      "category": "software",
+      "intent": "buying-guide",
+      "priority": 7,
+      "status": "queued",
+      "source": "claude-review",
+      "reason": "所有ソフト（Ableton Live/M4L）と相性、mk-ableton-controlと内部リンク可",
+      "addedAt": "2026-11-14"
+    },
+    {
+      "id": "syn-reface-dx-review",
+      "keyword": "reface DX レビュー 使い方 音作り",
+      "category": "synth",
+      "intent": "howto",
+      "priority": 6,
+      "status": "queued",
+      "source": "claude-review",
+      "reason": "所有機材。syn-fm-synth（比較）の受け皿となる個別記事",
+      "addedAt": "2026-11-14"
     }
   ]
 }

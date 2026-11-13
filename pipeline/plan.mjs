@@ -8,7 +8,8 @@ export function plan({ strategy = readJSON(P.strategy), topics = readJSON(P.topi
   const perCat = Object.fromEntries(published.map((p) => [p.front.category, 0]));
   for (const p of published) perCat[p.front.category] = (perCat[p.front.category] ?? 0) + 1;
   const score = (t) => t.priority * (strategy.categoryWeights?.[t.category] ?? 1) * (strategy.intentWeights?.[t.intent] ?? 1) / (1 + 0.15 * (perCat[t.category] ?? 0));
-  const queued = topics.topics.filter((t) => t.status === 'queued').sort((a, b) => score(b) - score(a));
+  // 'in-progress' at plan time can only be stale (left by an interrupted run), so treat it as queued
+  const queued = topics.topics.filter((t) => t.status === 'queued' || t.status === 'in-progress').sort((a, b) => score(b) - score(a));
   const picks = []; const used = new Set();
   for (const t of queued) { if (picks.length >= n) break; if (used.has(t.category)) continue; picks.push(t); used.add(t.category); }
   for (const t of queued) { if (picks.length >= n) break; if (!picks.includes(t)) picks.push(t); }
