@@ -155,3 +155,4 @@ mark { background: color-mix(in srgb, var(--ob-yellow) 45%, transparent); color:
 .g-stack { display: grid; gap: 2px; min-width: 0; }
 .g-stack small { color: var(--ob-label-2); font-size: 13px; }
 .g-skip { position: absolute; left: -999px; } .g-skip:focus { left: 8px; top: 8px; z-index: 99; background: var(--ob-bg); padding: 8px; }
+.ob-list .ob-chevron:has(.g-row-meta)::after { margin-left: 8px; }
