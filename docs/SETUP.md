@@ -7,7 +7,7 @@
 
 ---
 
-## ① Cloudflare Pages でサイトを公開（15分）
+## ① Cloudflare でサイトを公開（✅ 2026-11-14 完了：Workers 静的アセットとして GitHub 連携済み、gear.ours-blanc.app 接続済み。残りは 4・5 の Web Analytics のみ）
 1. Cloudflare ダッシュボード → Workers & Pages → Create → Pages → Connect to Git → `SpiceOfLife/ours-blanc-media`
 2. ビルド設定：Framework preset **Astro** / Build command `npm run build` / Output `dist` / 環境変数 `NODE_VERSION=22`
 3. デプロイ後 → Custom domains → `gear.ours-blanc.app` を追加（ours-blanc.app は Cloudflare 管理なので DNS は自動）
@@ -25,6 +25,12 @@
 1. 楽天アフィリエイトに登録（楽天会員でログイン）
 2. https://webservice.rakuten.co.jp → アプリ ID 発行。**アプリ URL / 許可する Referer に `https://gear.ours-blanc.app/` を登録**（2026 年の新 API は Referer チェック必須）
 3. 表示される **アプリケーション ID・アクセスキー・アフィリエイト ID** を GitHub **Secrets** へ：`RAKUTEN_APP_ID` / `RAKUTEN_ACCESS_KEY` / `RAKUTEN_AFFILIATE_ID`
+
+## ③-2 非公開データリポジトリへの書き込みトークン（5分）
+コード用リポジトリは公開、レポート・下書き・成果CSVは非公開の `SpiceOfLife/ours-blanc-media-data` に保存します。
+1. GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → Generate new token
+2. Repository access：**Only select repositories** → `ours-blanc-media-data` のみ / Permissions：**Contents: Read and write** / 有効期限：1年
+3. `ours-blanc-media` の **Secret** `DATA_REPO_TOKEN` に貼り付け
 
 ## ④ 初回実行（5分）
 1. GitHub → Actions → **Daily PDCA** → Run workflow（まず `dry_run` にチェックして動作確認 → 次にチェックなしで本番）
