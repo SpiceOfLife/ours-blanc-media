@@ -28,7 +28,7 @@
 
 ## ④ 初回実行（5分）
 1. GitHub → Actions → **Daily PDCA** → Run workflow（まず `dry_run` にチェックして動作確認 → 次にチェックなしで本番）
-2. 以後は毎朝 05:17 に自動実行。記事は品質チェック合格分だけが公開され、`reports/daily/latest.md` にレポートが出ます
+2. 以後は毎朝 05:17 に自動実行。記事は品質チェック合格分だけが公開され、非公開リポジトリ `ours-blanc-media-data` の `reports/daily/latest.md` にレポートが出ます
 3. `config/experience.json` の `notes` に、所有機材の感想を一言ずつ書いておくと記事に一次情報として使われます（**ここが記事の独自性の源泉**です）
 
 ## ⑤ Amazon アソシエイト（記事 10 本以上になってから）
@@ -55,7 +55,7 @@
 5. 収益をレポートに載せる（任意）：Google Cloud で「AdSense Management API」を有効化 → OAuth クライアント（ウェブ）作成 → OAuth Playground（スコープ `https://www.googleapis.com/auth/adsense.readonly`）でリフレッシュトークン取得 → **Secrets** `GOOGLE_OAUTH_CLIENT_ID` / `GOOGLE_OAUTH_CLIENT_SECRET` / `GOOGLE_OAUTH_REFRESH_TOKEN`、**Variable** `ADSENSE_ACCOUNT` = `accounts/pub-XXXXXXXXXXXXXXXX`
 
 ## ⑨ アフィリエイト成果の手入力（週 1 回・5分）
-楽天・Amazon は成果レポート API が無いため、管理画面の日別成果を `data/manual/YYYY-MM.csv` に追記：
+楽天・Amazon は成果レポート API が無いため、管理画面の日別成果を 非公開リポジトリ `ours-blanc-media-data` の `manual/YYYY-MM.csv` に追記：
 ```
 date,program,clicks,orders,revenue_jpy
 2026-11-20,rakuten,12,1,380
@@ -71,4 +71,4 @@ date,program,clicks,orders,revenue_jpy
 | 05:30頃 | Cloudflare Pages が自動デプロイ |
 | 07:40 | Claude の定期タスクがレポートを読み、要点・改善内容・Yu さんの ToDo を通知 |
 
-差し戻し記事は `drafts/` に理由付きで残ります。手直しして `src/content/posts/` に移せば次のデプロイで公開されます。
+差し戻し記事は非公開リポジトリの `drafts/` に理由付きで残ります。手直しして `src/content/posts/` に移せば次のデプロイで公開されます。

@@ -46,9 +46,7 @@ AI がリサーチ → 構成 → 執筆 → アイキャッチ生成 → 品質
 | `pipeline/` | 自動化スクリプト一式（Node 22、依存は `@anthropic-ai/sdk` と `sharp` のみ） |
 | `src/` | Astro サイト（レイアウト、コンポーネント、ページ、記事 Markdown） |
 | `public/eyecatch/` | 生成されたアイキャッチ |
-| `drafts/` | 不合格記事と審査結果 JSON |
-| `reports/daily/` | 日次レポート（Markdown / JSON / 生データ） |
-| `data/manual/` | API がないアフィリエイト成果の CSV（`date,program,clicks,orders,revenue_jpy`） |
+| `.data/`（非公開リポジトリ `ours-blanc-media-data`） | `reports/daily/` 日次レポート・`drafts/` 不合格記事・`manual/` 成果CSV・`strategy-history.json` 改善履歴。コード側を公開しても収益データは非公開 |
 
 ## 2. コンテンツ生成パイプライン
 

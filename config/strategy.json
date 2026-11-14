@@ -1,6 +1,6 @@
 {
   "updatedAt": "2026-11-13",
-  "version": 2,
+  "version": 1,
   "articlesPerDay": 2,
   "categoryWeights": {
     "audio-interface": 1.2,
@@ -21,20 +21,5 @@
   "refreshQueue": [],
   "notes": [
     "Launch phase: prioritise buying guides & comparisons with clear purchase intent; build 20+ quality articles before applying to AdSense."
-  ],
-  "history": [
-    {
-      "date": "2026-11-13",
-      "applied": [],
-      "check": [
-        "(mock) データ蓄積中"
-      ],
-      "hypotheses": [
-        "立ち上げ期は購入意図の強い比較記事が先に伸びる"
-      ],
-      "refreshed": [],
-      "published": [],
-      "costUSD": 0
-    }
   ]
 }

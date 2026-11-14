@@ -72,9 +72,9 @@ for (const job of jobs) {
 }
 
 // record refreshed slugs so PDCA doesn't churn the same page
-const s = readJSON(P.strategy); const h = s.history?.at(-1);
-if (h) { h.refreshed = results.filter((r) => r.refreshed && r.published).map((r) => r.slug); h.published = results.filter((r) => r.published).map((r) => r.slug); h.costUSD = +ledger.usd.toFixed(3); writeJSON(P.strategy, s); }
+const hist = readJSON(P.history, []); const h = hist.at(-1);
+if (h) { h.refreshed = results.filter((r) => r.refreshed && r.published).map((r) => r.slug); h.published = results.filter((r) => r.published).map((r) => r.slug); h.costUSD = +ledger.usd.toFixed(3); writeJSON(P.history, hist); }
 
 const md = writeReport({ date: today, metrics, pdca: act, plan: todo, results, durationSec: Math.round((Date.now() - t0) / 1000) });
-if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
+if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Daily run finished: ${results.filter((r) => r.published).length}/${results.length} published. Full report is in the private data repo.\n`);
 log(`done. published ${results.filter((r) => r.published).length}/${results.length}, cost $${ledger.usd.toFixed(2)}`);

@@ -15,6 +15,12 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+      - name: Checkout private data repo (reports, drafts, revenue CSVs, PDCA history)
+        uses: actions/checkout@v4
+        with:
+          repository: SpiceOfLife/ours-blanc-media-data
+          token: ${{ secrets.DATA_REPO_TOKEN }}
+          path: .data
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk >/dev/null
@@ -39,15 +45,22 @@ jobs:
           CF_ACCOUNT_ID: ${{ vars.CF_ACCOUNT_ID }}
           CF_SITE_TAG: ${{ vars.CF_SITE_TAG }}
           ARTICLES_OVERRIDE: ${{ inputs.articles }}
+          DATA_DIR: .data
         run: node pipeline/run-daily.mjs
       - name: Verify site still builds
         run: npm run build
-      - name: Commit & push (Cloudflare Pages deploys on push)
+      - name: Push private data (reports, drafts, history)
+        if: ${{ !inputs.dry_run }}
+        working-directory: .data
+        run: |
+          git config user.name "ours-blanc-bot"; git config user.email "support@ours-blanc.app"
+          git add -A
+          git diff --cached --quiet || { git commit -m "daily: $(TZ=Asia/Tokyo date +%F) report"; git push; }
+      - name: Commit & push site content (Cloudflare deploys on push)
         if: ${{ !inputs.dry_run }}
         run: |
-          git config user.name "ours-blanc-bot"
-          git config user.email "support@ours-blanc.app"
-          git add src/content/posts public/eyecatch config drafts reports
+          git config user.name "ours-blanc-bot"; git config user.email "support@ours-blanc.app"
+          git add src/content/posts public/eyecatch config
           git diff --cached --quiet && echo "nothing to commit" && exit 0
-          git commit -m "daily: $(TZ=Asia/Tokyo date +%F) articles + PDCA report"
+          git commit -m "daily: $(TZ=Asia/Tokyo date +%F) articles"
           git push

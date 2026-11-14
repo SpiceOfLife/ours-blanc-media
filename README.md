@@ -6,7 +6,7 @@ Research → outline → writing → eyecatch → quality gate → publish → d
 
 - Design: [`docs/DESIGN.md`](docs/DESIGN.md)
 - Setup (accounts, secrets): [`docs/SETUP.md`](docs/SETUP.md)
-- Latest daily report: [`reports/daily/latest.md`](reports/daily/latest.md)
+- Daily reports, drafts, revenue CSVs and PDCA history live in the **private** repo `SpiceOfLife/ours-blanc-media-data` (checked out at `.data/`), so this repo can stay public.
 
 ```bash
 npm ci

@@ -18,13 +18,13 @@ export function pagePerformance(metrics, posts) {
 }
 
 export async function pdca(metrics) {
-  const strategy = readJSON(P.strategy); const topics = readJSON(P.topics); const cats = readJSON(P.categories); const site = readJSON(P.site);
+  const strategy = readJSON(P.strategy); const history = readJSON(P.history, []); const topics = readJSON(P.topics); const cats = readJSON(P.categories); const site = readJSON(P.site);
   const posts = listPosts().filter((p) => !p.front.draft);
   const pages = pagePerformance(metrics, posts);
   // deterministic signals (used even when the model is unavailable)
   const striking = pages.filter((p) => p.position && p.position >= 8 && p.position <= 20 && p.impressions >= 30).sort((a, b) => b.impressions - a.impressions);
   const lowCtr = pages.filter((p) => p.impressions >= 100 && p.ctr < 0.01);
-  const ctx = { strategy: { ...strategy, history: undefined }, metrics: { gsc: metrics.gsc && { clicks: metrics.gsc.clicks, impressions: metrics.gsc.impressions, ctr: metrics.gsc.ctr, position: metrics.gsc.position, status: metrics.gsc.status },
+  const ctx = { strategy, recentChanges: history.slice(-7).map((h) => ({ date: h.date, applied: h.applied })), metrics: { gsc: metrics.gsc && { clicks: metrics.gsc.clicks, impressions: metrics.gsc.impressions, ctr: metrics.gsc.ctr, position: metrics.gsc.position, status: metrics.gsc.status },
     pv: metrics.cloudflare?.pageviews, adsense: metrics.adsense, affiliate: metrics.affiliate, revenueJPY: metrics.revenueJPY },
     trend: trend(7, metrics.date), pages, queries: metrics.gsc?.queries ?? [], queueLeft: topics.topics.filter((t) => t.status === 'queued').length, postCount: posts.length,
     categories: cats.map((c) => c.id) };
@@ -50,10 +50,11 @@ export async function pdca(metrics) {
     ...lowCtr.slice(0, 1).map((p) => ({ slug: p.slug, reason: `CTR ${(p.ctr * 100).toFixed(1)}% と低い → タイトル/description改善` }))]
     .filter((x, i, arr) => posts.some((p) => p.slug === x.slug) && arr.findIndex((y) => y.slug === x.slug) === i);
   // don't refresh the same article more than once per 14 days
-  const recent = new Set((strategy.history ?? []).filter((h) => h.date >= jstDate(-14)).flatMap((h) => h.refreshed ?? []));
+  const recent = new Set(history.filter((h) => h.date >= jstDate(-14)).flatMap((h) => h.refreshed ?? []));
   strategy.refreshQueue = refresh.filter((x) => !recent.has(x.slug)).slice(0, 3);
   strategy.updatedAt = jstDate(); strategy.version = (strategy.version ?? 1) + 1;
-  strategy.history = [...(strategy.history ?? []), { date: jstDate(), applied, check: r.check, hypotheses: r.hypotheses }].slice(-60);
+  delete strategy.history;
+  writeJSON(P.history, [...history, { date: jstDate(), applied, check: r.check, hypotheses: r.hypotheses }].slice(-365));
   writeJSON(P.strategy, strategy); writeJSON(P.topics, topics);
   return { check: r.check ?? [], hypotheses: r.hypotheses ?? [], applied, manualTodo: r.manualTodo ?? [], pages, striking, lowCtr, refreshQueue: strategy.refreshQueue };
 }

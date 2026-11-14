@@ -61,6 +61,7 @@ export const PDCA_SYSTEM = `あなたはアフィリエイトメディアのグ�
 変更は小さく1日1〜3個まで。出力は \`\`\`json ブロックのみ。`;
 
 export const pdcaPrompt = (ctx) => `現在の戦略: ${JSON.stringify(ctx.strategy)}
+直近の変更履歴: ${JSON.stringify(ctx.recentChanges)}
 昨日の指標: ${JSON.stringify(ctx.metrics)}
 直近7日の推移: ${JSON.stringify(ctx.trend)}
 記事別パフォーマンス（GSC/PV）: ${JSON.stringify(ctx.pages)}

@@ -3,6 +3,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+// Private business data (reports, drafts, revenue CSVs, PDCA history) lives in a separate PRIVATE repo
+// (SpiceOfLife/ours-blanc-media-data) checked out at DATA_DIR, so this code repo can be public.
+export const DATA = path.resolve(ROOT, process.env.DATA_DIR || '.data');
 export const P = {
   site: path.join(ROOT, 'config/site.json'),
   categories: path.join(ROOT, 'config/categories.json'),
@@ -11,9 +14,10 @@ export const P = {
   experience: path.join(ROOT, 'config/experience.json'),
   posts: path.join(ROOT, 'src/content/posts'),
   eyecatch: path.join(ROOT, 'public/eyecatch'),
-  drafts: path.join(ROOT, process.env.DRY_RUN === '1' ? '.work/drafts' : 'drafts'),
-  reports: path.join(ROOT, process.env.DRY_RUN === '1' ? '.work/reports' : 'reports/daily'),
-  manual: path.join(ROOT, 'data/manual'),
+  drafts: process.env.DRY_RUN === '1' ? path.join(ROOT, '.work/drafts') : path.join(DATA, 'drafts'),
+  reports: process.env.DRY_RUN === '1' ? path.join(ROOT, '.work/reports') : path.join(DATA, 'reports/daily'),
+  history: process.env.DRY_RUN === '1' ? path.join(ROOT, '.work/strategy-history.json') : path.join(DATA, 'strategy-history.json'),
+  manual: path.join(DATA, 'manual'),
   work: path.join(ROOT, '.work'),
 };
 export const DRY = process.env.DRY_RUN === '1';
